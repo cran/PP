@@ -1,0 +1,13 @@
+importFrom(splines, interpSpline)
+
+export(PP_3PLmle)
+export(PP_3PLwle)
+export(PP_RMmle)
+export(PP_RMwle)
+export(PP_GPCMmle)
+export(PP_GPCMwle)
+
+
+S3method(summary, PPd)
+S3method(summary, PPr)
+S3method(summary, PPp)
