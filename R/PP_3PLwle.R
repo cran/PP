@@ -12,8 +12,8 @@ DELTA_wle <- function(a,s,i,th,u)
 		# u is the binary response vector
 		
 		# 3PL model 
-		Zae <- expression(exp(a*(th-s)))
-		P <- i+(1-i) * eval(Zae) / (1+eval(Zae))
+		Zae <- exp(a*(th-s))
+		P <- i+(1-i) * (Zae / (1+Zae))
 		# 1st derivate of P
 		P.1ab <- a*(1-P)*(P-i)/(1-i)
 		# 2nd derivate of P
