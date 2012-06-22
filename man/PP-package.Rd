@@ -12,8 +12,8 @@ PP-package has been developed to easily compute ML and WL estimates (Warm 1989) 
 \tabular{ll}{
 Package: \tab PP\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2011-08-13\cr
+Version: \tab 0.2\cr
+Date: \tab 2012-06-17\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr
 }
@@ -32,9 +32,14 @@ Warm, Thomas A. (1989). Weighted Likelihood Estimation Of Ability In Item Respon
 }
 
 \keyword{ package }
-\seealso{
 
+\seealso{
+\code{\link{PP_3PLmle}},
+\code{\link{PP_3PLwle}},
+\code{\link{PP_GPCMmle}},
+\code{\link{PP_GPCMwle}}
 }
+
 \examples{
 PP_3PLwle(u=c(1,0,1,0),a=c(1.1,2,0.2,1),s=c(-2,-1.23,1.11,3.48),i=c(0,0.1,0.3,0.2))
 }

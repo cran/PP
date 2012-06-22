@@ -2,6 +2,9 @@ PP_RMmle <-
 function(s,expol=FALSE,...)
 #
 {
+#
+if(expol & length(s) <= 2){stop("Cannot perform extrapolation with #items <= 2")}
+  
 resm <- ifelse(upper.tri(matrix(1,length(s)+1,length(s)),diag=T),0,1)
 a <- rep(1,length(s))
 i <- rep(0,length(s))
@@ -23,14 +26,16 @@ if(expol)
     ergL[c(1,nrow(ergL)),2] <- pre$y
     wexpol <- "performed spline expol "
     SEl  <- sapply(erg1,function(x)x$SE)
+    ergL <- cbind(ergL,"SE"=SEl)
     } else
         {
         rmi <- lm(ml_estimate ~ Rawscore,data=data.frame(ergLk))
         nd <- data.frame(Rawscore=c(0,(max(ergLk[,1])+1)))
         pre <- predict(rmi,newdata=nd)
-        ergL[c(1,nrow(ergL)),2] <- pre$y
+        ergL[c(1,nrow(ergL)),2] <- pre
         wexpol <- "performed linmod expol"
         SEl  <- sapply(erg1,function(x)x$SE)
+        ergL <- cbind(ergL,"SE"=SEl)
         }
   } else
       {

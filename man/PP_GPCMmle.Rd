@@ -34,9 +34,12 @@ maximum number of iterations (default is arbitrarily set to 33)
 %%     ~~Describe \code{\dots} here~~
 }
 }
+
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+Note that if a set of items has unequal number of categories, then "missing" categories (items with a smaller number of categories) have to be considered as missing values in the matrix of thresholds s (see example below).
 }
+
+
 \value{
 Returns an object of class "PPp" which contains the following values:
 
@@ -58,15 +61,12 @@ Muraki, Eiji (1992). A Generalized Partial Credit Model: Application of an EM Al
 \author{
 Manuel Reif
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{PP_GPCMwle}}
 }
+
 \examples{
 
 THRES  <- matrix(c(-2.41,0.36,-0.97,0.92,-0.65,-0.65,-0.28,0.72),nrow=2)
@@ -74,6 +74,16 @@ sl     <- c(0.5,1,1.5,1.1)
 v1     <- c(1,2,1,3)
 
 e1     <- PP_GPCMmle(u=v1,sl=sl,s=THRES)
+
+
+# an ordinary PCM with a different number of categories
+
+THRES2  <- matrix(c(-2.41,NA,-0.57,0.92,-0.65,-0.65,-0.28,1.19),nrow=2)
+sl2     <- c(1,1,1,1)
+v2     <- c(1,2,1,3)
+
+e2     <- PP_GPCMmle(u=v2,sl=sl2,s=THRES2)
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

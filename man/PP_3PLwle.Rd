@@ -31,15 +31,13 @@ numeric vector with lower-asymptote parameters
 accuracy criterion - at which difference between two consecutive estimations the algorithm should stop
 }
   \item{osch}{
-maximum number of iterations (default is arbitrarily set to 22)
+maximum number of iterations (default is arbitrarily set to 33)
 }
   \item{\dots}{
 %%     ~~Describe \code{\dots} here~~
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+
 \value{
 Returns an object of class "PPd" which contains the following values:
 
@@ -58,15 +56,12 @@ Warm, Thomas A. (1989). Weighted Likelihood Estimation Of Ability In Item Respon
 \author{
 Manuel Reif
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{PP_3PLmle}}
 }
+%% ~Make other sections like Warning with \section{Warning }{....} ~
+
 \examples{
 PP_3PLwle(u=c(1,0,1,0),a=c(1.1,2,0.2,1),s=c(-2,-1.23,1.11,3.48),i=c(0,0.1,0.3,0.2))
 }

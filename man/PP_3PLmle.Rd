@@ -37,9 +37,8 @@ maximum number of iterations (default is arbitrarily set to 22)
 %%     ~~Describe \code{\dots} here~~
 }
 }
-\details{
 
-}
+
 \value{
 Returns an object of class "PPd" which contains the following values:
 
@@ -56,14 +55,10 @@ Baker, Frank B., and Kim, Seock-Ho (2004). Item Response Theory - Parameter Esti
 \author{
 Manuel Reif
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{PP_3PLwle}}
 }
 \examples{
 PP_3PLmle(u=c(1,0,1,0),a=c(1,1,1,1),s=c(-2,-1.23,1.11,3.48),i=rep(0,4))

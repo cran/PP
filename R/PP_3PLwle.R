@@ -2,15 +2,9 @@ PP_3PLwle <-
 function(u,a,s,i,theta0=0,exac=0.001,osch=33, ...)
 {
   
-#ctrl
-#1
-lelist <- sapply(list(u,a,s,i),length)
-if(any(lelist != lelist[1])){stop("Check length of input vectors \n")}
-#2 
-if(length(theta0) != 1){stop("theta0 must be of length 1 \n")}
-#3
-if(any(!(u %in% c(0,1)))){stop("u is not of format (0,1) as required \n")}
-  
+
+  #ctrl
+  co_3PL(u,a,s,i,theta0)
   
 DELTA_wle <- function(a,s,i,th,u) 
     {

@@ -23,9 +23,8 @@ TRUE if extrapolation for minimum and maximum raw scores (0 and all items solved
 refers to further arguments of PP_3PLmle
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+
+
 \value{
 Returns an object of class "PPr" which contains the following values:
 
@@ -41,15 +40,14 @@ Baker, Frank B., and Kim, Seock-Ho (2004). Item Response Theory - Parameter Esti
 \author{
 Manuel Reif
 }
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
+
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{PP_3PLmle}},
+\code{\link{PP_3PLwle}}
 }
+
 \examples{
 PP_RMmle(c(-4,-3,-1.789,0.1,0.2,1.11,2.13),expol=TRUE)
 }
