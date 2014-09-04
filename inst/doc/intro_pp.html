@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Getting started with PP</title>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Getting started with PP}
+-->
+
+<h1>Getting started with PP</h1>
+
+<p>First of all a few questions, whether the <code>PP</code> package is the one you are looking for.</p>
+
+<ol>
+<li>You have a data set with item responses from several persons</li>
+<li>You have item parameter estimates (e.g. difficulty parameters) from these items from (perhaps from a former application of these items)</li>
+<li>and these items follow the &frac12;/&frac34;-PL model or the generalized partial credit model</li>
+<li>You are interested in estimating each persons <strong>ability</strong> with traditional approaches (mle, wle, map, eap) or</li>
+<li>drawing <strong>plausible values</strong> for each person e.g. to apply secondary analysis or</li>
+<li>getting <strong>robust</strong> ability estimates with Jackknife Methods or with weighted likelihood approaches</li>
+</ol>
+
+<p>If you agree to question 1-3 and at least to one of question 3-6, then this package could be the right one for your tasks.</p>
+
+<p>In future versions:</p>
+
+<ol>
+<li>The range of model will be enlarged - especially estimators for the nominal response model and the nested logit model are planned to be integrated</li>
+<li><strong>Personfit</strong> statistics will be added for getting insights in response processes and to identify suspicious response patterns</li>
+</ol>
+
+<p>Now a simple example.</p>
+
+<h2>2-PL Model</h2>
+
+<p>In this example, we want to gain ability estimates for each person in our sample. Each person answered questions in a test which has been scaled by the 2-PL model. Item parameters (difficulty and slope) are known and are supposed as fixed. What are the next steps?</p>
+
+<ol>
+<li>Get the item responses and the item parameters inside the R workspace</li>
+<li>Check your data and reshape them, so they can be processed by the PP functions</li>
+<li>Decide which type of estimation you prefer (<code>?PP_4pl</code>)</li>
+<li>Run the estimation</li>
+</ol>
+
+<h3>Get</h3>
+
+<p>Getting the data inside the R workspace is quite easy in this case, because we merely load the data set which already comes with the PP package. It contains 60 response sets (60 persons answered to a test of 12 items) - and we have additional information, which we do not take into account for now. We first inspect the data, and in a second step informations about item difficulty and the slope parameters are extracted from the dataset attributes.</p>
+
+<pre><code class="r">library(PP)
+</code></pre>
+
+<pre><code>## PP package calling ...
+## Follow this project on github: https://github.com/manuelreif/PP.git
+</code></pre>
+
+<pre><code class="r">data(fourpl_df)
+
+dim(fourpl_df)
+</code></pre>
+
+<pre><code>## [1] 60 14
+</code></pre>
+
+<pre><code class="r">head(fourpl_df)
+</code></pre>
+
+<pre><code>##        id sex Item1 Item2 Item3 Item4 Item5 Item6 Item7 Item8 Item9 Item10
+## 1 LVL0694   w     1     1     1     1     0     0     1     0     0      0
+## 2 BBU1225   w     1     1     1     1     1     1     1     1     1      0
+## 3 MJN2028   w     1     1     1     1     1     1     1     1     0      0
+## 4 TSU0771   m     1     1     1     0     1     1     1     1     1      0
+## 5 XDS0698   w     1     1    NA     1     1     1     1     0     0      0
+## 6 BOS1292   w     0     0     0     0     0     0     0     0     0      0
+##   Item11 Item12
+## 1      0      0
+## 2      0      0
+## 3      0      0
+## 4      0      1
+## 5      0      0
+## 6      0      0
+</code></pre>
+
+<pre><code class="r">diff_par &lt;- attr(fourpl_df,&quot;diffpar&quot;)
+slope_par &lt;- attr(fourpl_df,&quot;slopes&quot;)
+</code></pre>
+
+<h3>Check and Reshape</h3>
+
+<p>Now we explore the item response data regarding full or zero score, missing values etc. . Considering this information, we are able to decide which estimation method we will apply.</p>
+
+<pre><code class="r"># extract items and transform the data.frame to matrix
+itmat &lt;- as.matrix(fourpl_df[,-(1:2)])
+
+
+# are there any full scores?
+fullsc &lt;- apply(itmat,1,function(x) (sum(x,na.rm=TRUE)+sum(is.na(x))) == length(x))
+any(fullsc)
+</code></pre>
+
+<pre><code>## [1] FALSE
+</code></pre>
+
+<pre><code class="r"># are there 0 scores?
+nullsc &lt;- apply(itmat,1,function(x) sum(x,na.rm=TRUE) == 0)
+any(nullsc)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r"># are there missing values? how many and where?
+nasc &lt;- apply(itmat,1,function(x) sum(is.na(x)))
+any(nasc &gt; 0)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">#which(nasc)
+
+# is our data dichotomous as expected?
+apply(itmat,2,function(x) table(x))
+</code></pre>
+
+<pre><code>##   Item1 Item2 Item3 Item4 Item5 Item6 Item7 Item8 Item9 Item10 Item11
+## 0     9    17    13    16    21    23    24    28    44     53     53
+## 1    51    43    46    44    38    37    35    32    16      7      7
+##   Item12
+## 0     53
+## 1      7
+</code></pre>
+
+<pre><code class="r"># are there any duplicates?
+rdup &lt;- duplicated(itmat)
+sum(rdup)
+</code></pre>
+
+<pre><code>## [1] 8
+</code></pre>
+
+<h3>Decide and Run</h3>
+
+<p>We use the <code>PP_4pl()</code> function for our estimation. So perhaps you are thinking:&ldquo;Why are we using a function to fit the 4-PL model, when we acutally have a dataset which stems from a 2-PL model scaled test?!&rdquo; This is because with the <code>PP_4pl()</code> function you can fit the:</p>
+
+<ol>
+<li><strong>1-PL model</strong> (Rasch model) by submitting: the data matrix, item difficulties and <strong>nothing else</strong>, since the 1-PL model is merely a 4-PL model with: any slope = 1, any lower asymptote = 0 and any upper asymptote = 1!</li>
+<li><strong>2-PL model</strong> by submitting: the data matrix, item difficulties and slope parameters. Lower and upper asymptotes are automatically set to 0 und 1 respectively.</li>
+<li><strong>3-PL model</strong> by submitting anything except the upper asymptote parameters</li>
+<li><strong>4-PL model</strong> \(\rightarrow\) submit all parameters &hellip;</li>
+</ol>
+
+<p>In this case, difficulty parameters and slopes are available, so we will submit them, and a 2-PL model is fitted <strong>automatically</strong>.</p>
+
+<p>We decide to apply a common maximum likelihood estimation (<code>type = &quot;mle&quot;</code>), and do not remove duplicated response patterns (see argument: <code>ctrl=list()</code>) from estimation because there are only 8 duplicated patterns. If the data set would have been much larger, duplicated patterns are more likely and therefore choosing to remove these patterns would speed up the estimation process significantly. (Choosing this option or not, does not change the numerical results!)</p>
+
+<pre><code class="r">library(PP)
+
+res1plmle &lt;- PP_4pl(respm = itmat,thres = diff_par, slopes = slope_par, type = &quot;mle&quot;)
+</code></pre>
+
+<pre><code>## Estimating:  2pl model ... 
+## type = mle 
+## Estimation finished!
+</code></pre>
+
+<pre><code class="r">summary(res1plmle)
+</code></pre>
+
+<pre><code>## PP Version:  0.5.3 
+## 
+##  Call: PP_4pl(respm = itmat, thres = diff_par, slopes = slope_par, type = &quot;mle&quot;) 
+## - job started @ Thu Sep  4 20:30:07 2014 
+## 
+## Estimation type: mle 
+## 
+## Number of iterations: 5 
+## -------------------------------------
+##       estimate     SE
+##  [1,]  -0.8555 0.7270
+##  [2,]   1.9097 0.9416
+##  [3,]   1.1454 0.9211
+##  [4,]   1.7883 0.9410
+##  [5,]   0.4274 0.8792
+##  [6,]     -Inf     NA
+##  [7,]   2.8310 0.9618
+##  [8,]   1.7414 0.9406
+##  [9,]  -2.4328 0.8520
+## [10,]  -0.2126 0.7750
+## [11,]   1.1454 0.9211
+## [12,]   4.0258 1.1822
+## [13,]  -1.6514 0.7451
+## [14,]  -3.6859 1.2125
+## [15,]   1.0795 0.9168
+## --------&gt; output truncated &lt;--------
+</code></pre>
+
+<p>Some facts:</p>
+
+<ol>
+<li>The function returns the <strong>point estimators</strong> and <strong>standard errors</strong> for each person. Whatever the (valid) input was, the main result is always a matrix with two columns and a number of rows which equals the number of persons (<code>res1plmle$resPP$resPP</code>).</li>
+<li>The function deals with <strong>missing values</strong>. These are treated as if the person has never seen this item.</li>
+<li>The order of the output estimates = order of the input. So the first estimate belongs to the first response pattern of the input data matrix.</li>
+</ol>
+
+<h3>Edit</h3>
+
+<p>In the last step, we add the estimates to the data.frame we extracted the item responses from in the first place.</p>
+
+<pre><code class="r">dafest &lt;- data.frame(fourpl_df,res1plmle$resPP$resPP)
+
+head(dafest,10)
+</code></pre>
+
+<pre><code>##         id sex Item1 Item2 Item3 Item4 Item5 Item6 Item7 Item8 Item9
+## 1  LVL0694   w     1     1     1     1     0     0     1     0     0
+## 2  BBU1225   w     1     1     1     1     1     1     1     1     1
+## 3  MJN2028   w     1     1     1     1     1     1     1     1     0
+## 4  TSU0771   m     1     1     1     0     1     1     1     1     1
+## 5  XDS0698   w     1     1    NA     1     1     1     1     0     0
+## 6  BOS1292   w     0     0     0     0     0     0     0     0     0
+## 7  KFF1422   w     1     1     1     1     1     1     1     1     1
+## 8  DCQ0198   w     1     1     1     1     0     1     1     1     1
+## 9  FTT1492   w     0     0     1     1     0     0     0     0     0
+## 10 GCP0645   m     1     1     1     1     1     0     0     1     0
+##    Item10 Item11 Item12 estimate     SE
+## 1       0      0      0  -0.8555 0.7270
+## 2       0      0      0   1.9097 0.9416
+## 3       0      0      0   1.1454 0.9211
+## 4       0      0      1   1.7883 0.9410
+## 5       0      0      0   0.4274 0.8792
+## 6       0      0      0     -Inf     NA
+## 7       0      0      1   2.8310 0.9618
+## 8       0      1      0   1.7414 0.9406
+## 9       0      0      0  -2.4328 0.8520
+## 10      0      0      0  -0.2126 0.7750
+</code></pre>
+
+<p>One shortcoming of the plain maximum likelihood estimate is the fact, that the <strong>extreme scores</strong> do not lead to valid parameter estimates (<code>-Inf</code> and <code>Inf</code> are hardly useful for practitioners). One possibility to overcome this issue, is to change the estimation method - for instance <code>type = wle</code> performs weighted likelihood estimation, which is on the one hand less biased than the mle estimate, and on the other hand provides reasonable estimates for the extreme scores.</p>
+
+<h3>Rerun</h3>
+
+<pre><code class="r">library(PP)
+
+res1plmle &lt;- PP_4pl(respm = itmat,thres = diff_par, slopes = slope_par, type = &quot;wle&quot;)
+</code></pre>
+
+<pre><code>## Estimating:  2pl model ... 
+## type = wle 
+## Estimation finished!
+</code></pre>
+
+<pre><code class="r">summary(res1plmle)
+</code></pre>
+
+<pre><code>## PP Version:  0.5.3 
+## 
+##  Call: PP_4pl(respm = itmat, thres = diff_par, slopes = slope_par, type = &quot;wle&quot;) 
+## - job started @ Thu Sep  4 20:30:07 2014 
+## 
+## Estimation type: wle 
+## 
+## Number of iterations: 5 
+## -------------------------------------
+##       estimate     SE
+##  [1,]  -0.8788 0.7263
+##  [2,]   1.9065 0.9416
+##  [3,]   1.0816 0.9169
+##  [4,]   1.7814 0.9409
+##  [5,]   0.3270 0.8679
+##  [6,]  -4.6556 1.7254
+##  [7,]   2.7746 0.9583
+##  [8,]   1.7322 0.9405
+##  [9,]  -2.2872 0.8257
+## [10,]  -0.2907 0.7668
+## [11,]   1.0816 0.9169
+## [12,]   3.7316 1.0975
+## [13,]  -1.5967 0.7408
+## [14,]  -3.2952 1.0712
+## [15,]   1.0089 0.9116
+## --------&gt; output truncated &lt;--------
+</code></pre>
+
+<p>So, this was what we were finally looking for.</p>
+
+</body>
+
+</html>

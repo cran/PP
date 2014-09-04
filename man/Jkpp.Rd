@@ -28,7 +28,7 @@ JKpp(estobj, ...)
 
 \item{...}{More input.}
 
-\item{cmeth}{Choose the centering method, to summarize the n jackknife results to one single ability estimate. There are three valid entries: "mean", "median" and "AMT".}
+\item{cmeth}{Choose the centering method, to summarize the n jackknife results to one single ability estimate. There are three valid entries: "mean", "median" and "AMT" (see Details for further description).}
 
 \item{maxsteps}{The maximum number of steps the NR Algorithm will take.}
 
@@ -48,7 +48,7 @@ JKpp(estobj, ...)
 This function uses a jackknife approach to compute person parameters. The jackknife ability measure is based on primarily estimated models (\code{PP_4pl()}, \code{PP_gpcm()} or \code{PPall()}) - so the function is applied on the estimation objects, and jackknifed ability measures are returned.
 }
 \details{
-Please use the Jackknife \bold{Standard-Error} output with \bold{caution}! It is implemented as suggested in Wainer & Wright 1980, but the results seem a bit strange, because the JK-SE is supposed to overestimate the SE compared to the MLE-SE. This was not the case for different examples!
+Please use the Jackknife \bold{Standard-Error} output with \bold{caution}! It is implemented as suggested in Wainer and Wright (1980), but the results seem a bit strange, because the JK-SE is supposed to overestimate the SE compared to the MLE-SE. Actually, in all examples an underestimation of the SE was observed compared to the MLE/WLE-SE!
 
 \bold{AMT-robustified jackknife:} When choosing \code{cmeth = AMT}, the jackknife ability subsample estimates and the original supplied ability estimate are combined to a single jackknife-ability value by the Sine M-estimator. The AMT (or Sine M-estimator) is one of the winners in the Princeton Robustness Study of 1972. To get a better idea how the estimation process works, take a closer look to the paper which is mentioned below (Wainer & Wright, 1980).
 }
@@ -59,7 +59,7 @@ Please use the Jackknife \bold{Standard-Error} output with \bold{caution}! It is
 
 ### data creation ##########
 
-set.seed(1622)
+set.seed(1623)
 # intercepts
 diffpar <- seq(-3,3,length=12)
 # slope parameters
@@ -68,8 +68,8 @@ la     <- round(runif(12,0,0.25),2)
 ua     <- round(runif(12,0.8,1),2)
 
 # response matrix
-awm <- matrix(sample(0:1,10*12,replace=TRUE),ncol=12)
-
+abpar <- rnorm(10,0,1.7)
+awm <- sim_4pl(beta = diffpar,alpha = sl,lowerA = la,upperA=ua,theta = abpar)
 
 
 ## 1PL model ##### 
@@ -185,7 +185,7 @@ ua     <- c(0.97,0.91,1,1,1,1)
 
 awmatrix <- matrix(c(1,0,1,0,1,1,1,0,0,1
                      ,2,0,0,0,0,0,0,0,0,1
-                     ,1,2,2,1,1,1,1,0,0,1),byrow=TRUE,nrow=5)
+                     ,0,2,2,1,1,1,1,0,0,1),byrow=TRUE,nrow=5)
 
 # create model2est
 # this function tries to help finding the appropriate 
@@ -205,9 +205,6 @@ respmixed_wle <- PPall(respm = awmatrix,thres = THRESx,
 
 res_jk114 <- JKpp(respmixed_mle)
 res_jk115 <- JKpp(respmixed_wle)
-
-
-
 
 
 }

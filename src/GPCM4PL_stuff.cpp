@@ -26,7 +26,7 @@ PP1I(0) = la + (ua - la) * exp(alpha*(theta - beta))/(1+exp(alpha*(theta - beta)
 PP1I(1) = alpha * (ua - PP1I(0)) * (PP1I(0) - la) / (ua - la);
 
 // information
-PP1I(2) = pow(PP1I(1),2)/(PP1I(0)*(1-PP1I(0)));
+PP1I(2) = (PP1I(1)*PP1I(1))/(PP1I(0)*(1-PP1I(0)));
 
 return PP1I;
 }
@@ -54,7 +54,7 @@ PP1I(0) = la + (ua - la) * exp(alpha*(theta - beta))/(1+exp(alpha*(theta - beta)
 PP1I(1) = alpha * (ua - PP1I(0)) * (PP1I(0) - la) / (ua - la);
 
 // information
-PP1I(2) = pow(PP1I(1),2)/(PP1I(0)*(1-PP1I(0)));
+PP1I(2) = (PP1I(1)*PP1I(1))/(PP1I(0)*(1-PP1I(0)));
 
 // second deriv
 PP1I(3) = alpha / (ua-la) * (ua*PP1I(1) - 2*PP1I(0)*PP1I(1)  + la*PP1I(1));
@@ -64,19 +64,22 @@ PP1I(4) = alpha / (ua-la) * (ua*PP1I(3) - 2*PP1I(1)*PP1I(1) - 2*PP1I(0)*PP1I(3) 
 
 // information first deriv
 
-double oben  = (2*PP1I(1)*PP1I(3)*PP1I(0)*(1-PP1I(0)) - pow(PP1I(1),2)*(PP1I(1)*(1-PP1I(0)) + PP1I(0)*(-PP1I(1))));
-double unten = pow(PP1I(0),2)*pow(1-PP1I(0),2);
+double empp1i = 1-PP1I(0);
+
+double oben  = (2*PP1I(1)*PP1I(3)*PP1I(0)*(1-PP1I(0)) - PP1I(1)*PP1I(1)*(PP1I(1)*(1-PP1I(0)) + PP1I(0)*(-PP1I(1))));
+double unten = PP1I(0)*PP1I(0)*empp1i*empp1i;
 
 double INF2 = oben/unten;
 
 //PP1I(5) = (PP1I(2) * PP1I(1) * PP1I(3) * PP1I(1) - PP1I(0) * (PP1I(1) * (PP1I(2) * PP1I(4) - PP1I(3) * INF2) + PP1I(2) * PP1I(3) *PP1I(3)))/pow(PP1I(0),2);
 double Qj = 1-PP1I(0);
+double PP1IQj = PP1I(0) * Qj;
 // J'
 //PP1I(5) = ((PP1I(3)*PP1I(3) + PP1I(1)*PP1I(4))*PP1I(0)*Qj - PP1I(1)*PP1I(3)*(PP1I(1)*Qj - PP1I(0)*PP1I(1))) / pow(PP1I(0) * Qj,2);
 
 // diese version stimmt mit dem alten PP package ueberein, hat aber mMn einen vorzeichenfehler
 
-double J1 = ((PP1I(3)*PP1I(3) - PP1I(1)*PP1I(4))*PP1I(0)*Qj + PP1I(1)*PP1I(3)*(PP1I(1)*Qj - PP1I(0)*PP1I(1))) / pow(PP1I(0) * Qj,2);
+double J1 = ((PP1I(3)*PP1I(3) - PP1I(1)*PP1I(4))*PP1I(0)*Qj + PP1I(1)*PP1I(3)*(PP1I(1)*Qj - PP1I(0)*PP1I(1))) / (PP1IQj*PP1IQj);
 
 double J = PP1I(1) * PP1I(3) / (PP1I(0)*Qj);
 
@@ -127,7 +130,7 @@ return HU;
 
 // [[Rcpp::export]]
 NumericMatrix L4pl(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA, 
-                   NumericVector CS, NumericVector DS, NumericVector THETA, bool map, 
+                   NumericVector LOWA, NumericVector UPPA, NumericVector THETA, bool map, 
                    NumericVector mu, NumericVector sigma2) {
 
 int npers = awm.nrow();
@@ -150,8 +153,8 @@ for(int it = 0; it < nitem; it++)
   double alpha = ALPHA(it);
   NumericVector delta = DELTA(_,it);
   LogicalVector nas(maxca);
-  double lowerA = CS(it);
-  double upperA = DS(it);
+  double lowerA = LOWA(it);
+  double upperA = UPPA(it);
   
   // find NA and kill them
   for (int fna = 0; fna < maxca; ++fna) {
@@ -223,7 +226,8 @@ return l1l2M;
 // LIKELIHOOD - L1, L2 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // [[Rcpp::export]]
-NumericMatrix L4pl_wle(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA, NumericVector CS, NumericVector DS, NumericVector THETA) {
+NumericMatrix L4pl_wle(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA,
+                NumericVector LOWA, NumericVector UPPA, NumericVector THETA) {
 
 int npers = awm.nrow();
 int nitem = awm.ncol();
@@ -245,8 +249,8 @@ for(int it = 0; it < nitem; it++)
   double alpha = ALPHA(it);
   NumericVector delta = DELTA(_,it);
   LogicalVector nas(maxca);
-  double lowerA = CS(it);
-  double upperA = DS(it);
+  double lowerA = LOWA(it);
+  double upperA = UPPA(it);
   
   // find NA and kill them
   for (int fna = 0; fna < maxca; ++fna) {
@@ -300,7 +304,7 @@ for(int it = 0; it < nitem; it++)
 // I * J' - I' * J
 //NumericVector corru = (l1l2M(_,1)*l1l2M(_,3) - l1l2M(_,4)*l1l2M(_,2)) / (2 * pow(l1l2M(_,1),2));
 
-NumericVector corru = l1l2M(_,3) / (2 * pow(l1l2M(_,1),2));
+NumericVector corru = l1l2M(_,3) / (2 * l1l2M(_,1)*l1l2M(_,1));
 
 l1l2M(_,4) = (l1l2M(_,0) + l1l2M(_,2) / (2*l1l2M(_,1))) / (l1l2M(_,1) + corru);
 l1l2M(_,5) = THETA + l1l2M(_,4);
@@ -317,7 +321,7 @@ return l1l2M;
 
 // [[Rcpp::export]]
 NumericMatrix L4pl_robust(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA, 
-                          NumericVector CS, NumericVector DS,
+                          NumericVector LOWA, NumericVector UPPA,
                           NumericVector THETA, double H) {
 
 int npers = awm.nrow();
@@ -340,8 +344,8 @@ for(int it = 0; it < nitem; it++)
   double alpha = ALPHA(it);
   NumericVector delta = DELTA(_,it);
   LogicalVector nas(maxca);
-  double lowerA = CS(it);
-  double upperA = DS(it);
+  double lowerA = LOWA(it);
+  double upperA = UPPA(it);
   
   // find NA and kill them
   for (int fna = 0; fna < maxca; ++fna) {
@@ -406,7 +410,7 @@ return l1l2M;
 
 // [[Rcpp::export]]
 List NR_4PL(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA, 
-NumericVector CS, NumericVector DS, NumericVector THETA, String wm, 
+NumericVector LOWA, NumericVector UPPA, NumericVector THETA, String wm, 
 int maxsteps, double exac, NumericVector mu, NumericVector sigma2, double H) {
 
 int npers = awm.nrow();
@@ -420,7 +424,7 @@ if(wm == "wle")
     
   for(int newr = 0; newr < maxsteps; newr++)
     {
-    NumericMatrix reso = L4pl_wle(awm,DELTA,ALPHA,CS,DS,THETA);
+    NumericMatrix reso = L4pl_wle(awm,DELTA,ALPHA,LOWA,UPPA,THETA);
     THETA = reso(_,5);
     
     NumericVector diffs = reso(_,4);
@@ -430,7 +434,8 @@ if(wm == "wle")
     if( (is_true(all(abs(diffs1) < exac))) | (newr == (maxsteps-1)))
       {
         resPP(_,0) = THETA;
-        resPP(_,1) = pow(1/reso(_,1),0.5);
+        //resPP(_,1) = pow(1/reso(_,1),0.5); // thank you solaris
+        resPP(_,1) = 1/reso(_,1);
         howlong = newr + 1;
         break;
       }
@@ -444,7 +449,7 @@ if(wm == "wle")
 
     for(int newr = 0; newr < maxsteps; newr++)
       {
-      NumericMatrix reso = L4pl(awm,DELTA,ALPHA,CS,DS,THETA,map,mu,sigma2);
+      NumericMatrix reso = L4pl(awm,DELTA,ALPHA,LOWA,UPPA,THETA,map,mu,sigma2);
       THETA = reso(_,3);
       
       NumericVector diffs = reso(_,2);
@@ -454,7 +459,7 @@ if(wm == "wle")
       if( (is_true(all(abs(diffs1) < exac))) | (newr == (maxsteps-1)))
         {
           resPP(_,0) = THETA;
-          resPP(_,1) = 1/pow(reso(_,1)*(-1),0.5);
+          resPP(_,1) = 1/reso(_,1)*(-1);
           howlong = newr + 1;
           break;
         }
@@ -466,7 +471,7 @@ if(wm == "wle")
        bool map = TRUE; 
           for(int newr = 0; newr < maxsteps; newr++)
             {
-            NumericMatrix reso = L4pl(awm,DELTA,ALPHA,CS,DS,THETA,map,mu,sigma2);
+            NumericMatrix reso = L4pl(awm,DELTA,ALPHA,LOWA,UPPA,THETA,map,mu,sigma2);
             THETA = reso(_,3);
             
             NumericVector diffs = reso(_,2);
@@ -476,7 +481,7 @@ if(wm == "wle")
             if( (is_true(all(abs(diffs1) < exac))) | (newr == (maxsteps-1)))
               {
                 resPP(_,0) = THETA;
-                resPP(_,1) = 1/pow(reso(_,1)*(-1),0.5);
+                resPP(_,1) = 1/reso(_,1)*(-1);
                 howlong = newr + 1;
                 break;
               }
@@ -488,7 +493,7 @@ if(wm == "wle")
             
             for(int newr = 0; newr < maxsteps; newr++)
               {
-              NumericMatrix reso = L4pl_robust(awm,DELTA,ALPHA,CS,DS,THETA,H);
+              NumericMatrix reso = L4pl_robust(awm,DELTA,ALPHA,LOWA,UPPA,THETA,H);
               THETA = reso(_,3);
               
               NumericVector diffs = reso(_,2);
@@ -498,7 +503,7 @@ if(wm == "wle")
               if( (is_true(all(abs(diffs1) < exac))) | (newr == (maxsteps-1)))
                 {
                   resPP(_,0) = THETA;
-                  resPP(_,1) = 1/pow(reso(_,1)*(-1),0.5);
+                  resPP(_,1) = 1/reso(_,1)*(-1);
                   howlong = newr + 1;
                   break;
                 }
@@ -674,9 +679,10 @@ for(int it = 0; it < nitem; it++)
       rs += ks * alpha * ergP;
       // second derivates right and left side
       rs2 += ks * alpha * ergP;
-      ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+      //ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+      ls2 += ks*ks * alpha*alpha * ergP;
         }
-      rs2 = pow(rs2,2);
+      rs2 = rs2*rs2;
       
       // write first and second derivs in 2 column matrix - for each person
       l1l2M(pe,0) += resp * alpha - rs;
@@ -803,7 +809,7 @@ for(int i = 0; i < nthres; i++)
   
   double INF2 = alpha * overac3;
  
-corrts(2) = sum((INF * fds * sds * fds - ps * (fds * (INF * tds - sds * INF2) + INF * sds *sds))/pow(ps,2));
+corrts(2) = sum((INF * fds * sds * fds - ps * (fds * (INF * tds - sds * INF2) + INF * sds *sds))/(ps*ps));
 
 
 return corrts;
@@ -816,7 +822,8 @@ return corrts;
 // P FUNCTION L1, L2 --->>>  WLE  <<<<---- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // [[Rcpp::export]]
-NumericMatrix L12gpcm_wle(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA, NumericVector THETA) {
+NumericMatrix L12gpcm_wle(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA,
+                          NumericVector THETA) {
 // awm = antwortmatrix
 // 
 int npers = awm.nrow();
@@ -887,9 +894,10 @@ for(int it = 0; it < nitem; it++)
       rs += ks * alpha * ergP;
       // second derivates right and left side
       rs2 += ks * alpha * ergP;
-      ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+      //ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+      ls2 += ks*ks * alpha*alpha * ergP;
         }
-      rs2 = pow(rs2,2);
+      rs2 = rs2*rs2;
       
       // Pcorr2_gpcm(NumericVector delta, double alpha, double theta) 
       
@@ -927,7 +935,7 @@ for(int it = 0; it < nitem; it++)
   }
 
 
-l1l2M(_,3) = l1l2M(_,3)/(2*pow(l1l2M(_,1),2));
+l1l2M(_,3) = l1l2M(_,3)/(2*l1l2M(_,1)*l1l2M(_,1));
 
 //l1l2M(_,5) = (l1l2M(_,0) + l1l2M(_,2)/(2*l1l2M(_,3))) / (l1l2M(_,1) + l1l2M(_,4)); // here
 //l1l2M(_,5) = (l1l2M(_,0) + l1l2M(_,2)/(2*l1l2M(_,3))) / (l1l2M(_,3)*(-1) + l1l2M(_,4)); // here
@@ -1019,9 +1027,10 @@ for(int it = 0; it < nitem; it++)
       rs += ks * alpha * ergP;
       // second derivates right and left side
       rs2 += ks * alpha * ergP;
-      ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+      //ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+      ls2 += ks*ks * alpha * alpha * ergP;
         }
-      rs2 = pow(rs2,2);
+      rs2 = rs2* rs2;
       
       // write first and second derivs in 2 column matrix - for each person
       l1l2M(pe,0) += (resp * alpha - rs)*hu;
@@ -1071,7 +1080,7 @@ if(wm == "wle")
     if( (is_true(all(abs(reso(_,4)) < exac))) | (newr == (maxsteps-1)))
       {
         resPP(_,0) = THETA;
-        resPP(_,1) = pow(1/reso(_,1),0.5);
+        resPP(_,1) = 1/reso(_,1);
         howlong = newr;
         break;
       }
@@ -1089,7 +1098,7 @@ if(wm == "wle")
       if( (is_true(all(abs(reso(_,2)) < exac))) | (newr == (maxsteps-1)))
         {
           resPP(_,0) = THETA;
-          resPP(_,1) = 1/pow(reso(_,1)*(-1),0.5);
+          resPP(_,1) = 1/reso(_,1)*(-1);
           howlong = newr;
           break;
         }
@@ -1107,7 +1116,7 @@ if(wm == "wle")
             if( (is_true(all(abs(reso(_,2)) < exac))) | (newr == (maxsteps-1)))
               {
                 resPP(_,0) = THETA;
-                resPP(_,1) = 1/pow(reso(_,1)*(-1),0.5);
+                resPP(_,1) = 1/reso(_,1)*(-1);
                 howlong = newr;
                 break;
               }
@@ -1125,7 +1134,7 @@ if(wm == "wle")
                 if( (is_true(all(abs(reso(_,2)) < exac))) | (newr == (maxsteps-1)))
                   {
                     resPP(_,0) = THETA;
-                    resPP(_,1) = 1/pow(reso(_,1)*(-1),0.5);
+                    resPP(_,1) = 1/reso(_,1)*(-1);
                     howlong = newr;
                     break;
                   }
@@ -1147,7 +1156,7 @@ return List::create(_["resPP"] = resPP, _["nsteps"] = howlong);
 
 // [[Rcpp::export]]
 NumericMatrix Lgpcm4pl_mle(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA,
-                           NumericVector CS, NumericVector DS, NumericVector THETA, 
+                           NumericVector LOWA, NumericVector UPPA, NumericVector THETA, 
                            CharacterVector model, NumericVector mu, NumericVector sigma2, bool map) {
 // awm = antwortmatrix
 // 
@@ -1178,8 +1187,8 @@ for(int it = 0; it < nitem; it++)
   if(modit == "4PL")  
     {
 
-  double lowerA = CS(it);
-  double upperA = DS(it);
+  double lowerA = LOWA(it);
+  double upperA = UPPA(it);
   
   // find NA and kill them
   for (int fna = 0; fna < maxca; fna++) {
@@ -1267,9 +1276,10 @@ for(int it = 0; it < nitem; it++)
             rs += ks * alpha * ergP;
             // second derivates right and left side
             rs2 += ks * alpha * ergP;
-            ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+            //ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+            ls2 += ks*ks * alpha * alpha * ergP;
               }
-            rs2 = pow(rs2,2);
+            rs2 = rs2 * rs2;
             
             // write first and second derivs in 2 column matrix - for each person
             l1l2M(pe,0) += resp * alpha - rs;
@@ -1322,7 +1332,7 @@ return l1l2M;
 
 // [[Rcpp::export]]
 NumericMatrix Lgpcm4pl_wle(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA,
-                           NumericVector CS, NumericVector DS, NumericVector THETA, 
+                           NumericVector LOWA, NumericVector UPPA, NumericVector THETA, 
                            CharacterVector model)
 {
 // awm = antwortmatrix
@@ -1356,8 +1366,8 @@ for(int it = 0; it < nitem; it++)
    if(modit == "4PL")  
       {
 
-      double lowerA = CS(it);
-      double upperA = DS(it);
+      double lowerA = LOWA(it);
+      double upperA = UPPA(it);
       
       // find NA and kill them
       for (int fna = 0; fna < maxca; ++fna) {
@@ -1452,9 +1462,10 @@ for(int it = 0; it < nitem; it++)
           rs += ks * alpha * ergP;
           // second derivates right and left side
           rs2 += ks * alpha * ergP;
-          ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+          //ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+          ls2 += ks*ks * alpha * alpha * ergP;
             }
-          rs2 = pow(rs2,2);
+          rs2 = rs2*rs2;
           
           // Pcorr2_gpcm(NumericVector delta, double alpha, double theta) 
           
@@ -1481,7 +1492,7 @@ for(int it = 0; it < nitem; it++)
   }
 
 
-l1l2M(_,3) = l1l2M(_,3)/(2*pow(l1l2M(_,1),2));
+l1l2M(_,3) = l1l2M(_,3)/(2*l1l2M(_,1)*l1l2M(_,1));
 
 l1l2M(_,4) = (l1l2M(_,0) + l1l2M(_,2)/(2*l1l2M(_,1))) / (l1l2M(_,1)*(-1) + l1l2M(_,3));
 l1l2M(_,5) = THETA - l1l2M(_,4);
@@ -1496,7 +1507,7 @@ return l1l2M;
 
 // [[Rcpp::export]]
 NumericMatrix Lgpcm4pl_robust(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA,
-                           NumericVector CS, NumericVector DS, NumericVector THETA, 
+                           NumericVector LOWA, NumericVector UPPA, NumericVector THETA, 
                            CharacterVector model, double H) {
 // awm = antwortmatrix
 // 
@@ -1527,8 +1538,8 @@ for(int it = 0; it < nitem; it++)
   if(modit == "4PL")  
     {
 
-  double lowerA = CS(it);
-  double upperA = DS(it);
+  double lowerA = LOWA(it);
+  double upperA = UPPA(it);
   
   // find NA and kill them
   for (int fna = 0; fna < maxca; fna++) {
@@ -1618,9 +1629,10 @@ for(int it = 0; it < nitem; it++)
             rs += ks * alpha * ergP;
             // second derivates right and left side
             rs2 += ks * alpha * ergP;
-            ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+            //ls2 += pow(ks,2) * pow(alpha,2) * ergP;
+            ls2 += ks*ks * alpha * alpha * ergP;
               }
-            rs2 = pow(rs2,2);
+            rs2 = rs2 * rs2;
             
             // write first and second derivs in 2 column matrix - for each person
             l1l2M(pe,0) += (resp * alpha - rs) * hu;
@@ -1652,8 +1664,8 @@ return l1l2M;
 // NR - Algorithm mixed --->>>  MLE + WLE + MAP <<<<---- +++++++++++++++++++++++++++++++++++++++++++++++
 
 // [[Rcpp::export]]
-List NR_mixed(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA, NumericVector CS,
-              NumericVector DS, NumericVector THETA, CharacterVector model,
+List NR_mixed(IntegerMatrix awm, NumericMatrix DELTA, NumericVector ALPHA, 
+              NumericVector LOWA, NumericVector UPPA, NumericVector THETA, CharacterVector model,
               String wm, int maxsteps, double exac, NumericVector mu, NumericVector sigma2, double H) {
 
 int npers = awm.nrow();
@@ -1666,13 +1678,13 @@ if(wm == "wle")
     
   for(int newr = 0; newr < maxsteps; newr++)
     {
-    NumericMatrix reso = Lgpcm4pl_wle(awm,DELTA,ALPHA,CS,DS,THETA,model);
+    NumericMatrix reso = Lgpcm4pl_wle(awm,DELTA,ALPHA,LOWA,UPPA,THETA,model);
     THETA = reso(_,5);
     
     if( (is_true(all(abs(reso(_,4)) < exac))) | (newr == (maxsteps-1)))
       {
         resPP(_,0) = THETA;
-        resPP(_,1) = pow(1/reso(_,1),0.5);
+        resPP(_,1) = 1/reso(_,1);
         howlong = newr + 1;
         break;
       }
@@ -1685,13 +1697,13 @@ if(wm == "wle")
     bool map = FALSE;
     for(int newr = 0; newr < maxsteps; newr++)
       {
-      NumericMatrix reso = Lgpcm4pl_mle(awm,DELTA,ALPHA,CS,DS,THETA,model, mu, sigma2, map);
+      NumericMatrix reso = Lgpcm4pl_mle(awm,DELTA,ALPHA,LOWA,UPPA,THETA,model, mu, sigma2, map);
       THETA = reso(_,3);
       
       if( (is_true(all(abs(reso(_,2)) < exac))) | (newr == (maxsteps-1)))
         {
           resPP(_,0) = THETA;
-          resPP(_,1) = 1/pow(reso(_,1)*(-1),0.5);
+          resPP(_,1) = 1/reso(_,1)*(-1);
           howlong = newr + 1;
           break;
         }
@@ -1704,13 +1716,13 @@ if(wm == "wle")
         
           for(int newr = 0; newr < maxsteps; newr++)
             {
-            NumericMatrix reso = Lgpcm4pl_mle(awm,DELTA,ALPHA,CS,DS,THETA,model, mu, sigma2, map);
+            NumericMatrix reso = Lgpcm4pl_mle(awm,DELTA,ALPHA,LOWA,UPPA,THETA,model, mu, sigma2, map);
             THETA = reso(_,3);
             
             if( (is_true(all(abs(reso(_,2)) < exac))) | (newr == (maxsteps-1)))
               {
                 resPP(_,0) = THETA;
-                resPP(_,1) = 1/pow(reso(_,1)*(-1),0.5);
+                resPP(_,1) = 1/reso(_,1)*(-1);
                 howlong = newr + 1;
                 break;
               }
@@ -1723,13 +1735,13 @@ if(wm == "wle")
 
     for(int newr = 0; newr < maxsteps; newr++)
       {
-      NumericMatrix reso = Lgpcm4pl_robust(awm,DELTA,ALPHA,CS,DS,THETA,model, H);
+      NumericMatrix reso = Lgpcm4pl_robust(awm,DELTA,ALPHA,LOWA,UPPA,THETA,model, H);
       THETA = reso(_,3);
       
       if( (is_true(all(abs(reso(_,2)) < exac))) | (newr == (maxsteps-1)))
         {
           resPP(_,0) = THETA;
-          resPP(_,1) = 1/pow(reso(_,1)*(-1),0.5);
+          resPP(_,1) = 1/reso(_,1)*(-1);
           howlong = newr + 1;
           break;
         }

@@ -2,7 +2,7 @@
 #' 
 #' This function uses a jackknife approach to compute person parameters. The jackknife ability measure is based on primarily estimated models (\code{PP_4pl()}, \code{PP_gpcm()} or \code{PPall()}) - so the function is applied on the estimation objects, and jackknifed ability measures are returned.
 #' 
-#' Please use the Jackknife \bold{Standard-Error} output with \bold{caution}! It is implemented as suggested in Wainer & Wright 1980, but the results seem a bit strange, because the JK-SE is supposed to overestimate the SE compared to the MLE-SE. This was not the case for different examples! 
+#' Please use the Jackknife \bold{Standard-Error} output with \bold{caution}! It is implemented as suggested in Wainer and Wright (1980), but the results seem a bit strange, because the JK-SE is supposed to overestimate the SE compared to the MLE-SE. Actually, in all examples an underestimation of the SE was observed compared to the MLE/WLE-SE! 
 #' 
 #' 
 #' \bold{AMT-robustified jackknife:} When choosing \code{cmeth = AMT}, the jackknife ability subsample estimates and the original supplied ability estimate are combined to a single jackknife-ability value by the Sine M-estimator. The AMT (or Sine M-estimator) is one of the winners in the Princeton Robustness Study of 1972. To get a better idea how the estimation process works, take a closer look to the paper which is mentioned below (Wainer & Wright, 1980).
@@ -27,7 +27,7 @@ JKpp <- function(estobj,...) UseMethod("JKpp")
 
 
 #' @rdname Jkpp
-#' @param cmeth Choose the centering method, to summarize the n jackknife results to one single ability estimate. There are three valid entries: "mean", "median" and "AMT".
+#' @param cmeth Choose the centering method, to summarize the n jackknife results to one single ability estimate. There are three valid entries: "mean", "median" and "AMT" (see Details for further description).
 #' @param maxsteps The maximum number of steps the NR Algorithm will take.
 #' @param exac How accurate are the estimates supposed to be? Default is 0.001.
 #' @param fullmat Default = FALSE. If TRUE, the function returns the whole jackknife matrix, which is the basis for the jackknife estimator.
@@ -49,7 +49,8 @@ thres <- estobj$ipar$thres
 slopes <- estobj$ipar$slopes
 lowerA <- estobj$ipar$lowerA
 upperA <- estobj$ipar$upperA
-theta_start <- estobj$ipar$theta_start
+#theta_start <- estobj$ipar$theta_start
+theta_start <- rep(0,nrow(respm))
 mu <- estobj$ipar$mu
 sigma2 <- estobj$ipar$sigma2
 cont <- estobj$ipar$cont
@@ -71,6 +72,7 @@ loa <- 1:ncol(respm)
 # save the responses into this matrix
 jk_mat <- matrix(0,nrow=nrow(respm),ncol=length(loa))
 
+#browser()
   
 # run the 4pl jackknife 
 if(type %in% c("mle","wle","map","robust"))
@@ -80,9 +82,7 @@ if(type %in% c("mle","wle","map","robust"))
     {
       
     
-    jk_mat[,jkrun] <- NR_4PL(respm[,-jkrun,drop=FALSE],DELTA = thres[,-jkrun,drop=FALSE],ALPHA = slopes[-jkrun],
-                                  CS = lowerA[-jkrun],DS = upperA[-jkrun], THETA = theta_start, 
-                                  wm=type,maxsteps,exac,mu,sigma2,H=H)$resPP[,1] 
+    jk_mat[,jkrun] <- NR_4PL(respm[,-jkrun,drop=FALSE],DELTA = thres[,-jkrun,drop=FALSE],ALPHA = slopes[-jkrun], LOWA = lowerA[-jkrun],UPPA = upperA[-jkrun], THETA = theta_start, wm=type,maxsteps,exac,mu,sigma2,H=H)$resPP[,1] 
         
     }
   
@@ -93,11 +93,10 @@ if(type %in% c("mle","wle","map","robust"))
       for(jkrun in loa)
         {
             jk_mat[,jkrun] <- eap_4pl(respm[,-jkrun,drop=FALSE], thres[,-jkrun,drop=FALSE],
-                                      slopes[-jkrun], lowerA=lowerA[-jkrun], upperA=upperA[-jkrun],
-                                      mu = mu, sigma2 = sigma2)[,1]
+                                      slopes[-jkrun], lowerA=lowerA[-jkrun],
+                                      upperA=upperA[-jkrun],mu = mu, sigma2 = sigma2)[,1]
         }
       }
-
 
 
 notna <- !is.na(estobj$resPP$resPP[,2])
@@ -169,7 +168,8 @@ JKpp.gpcm <- function(estobj, cmeth="mean", maxsteps=500,
   slopes <- estobj$ipar$slopes
 #   lowerA <- estobj$ipar$lowerA
 #   upperA <- estobj$ipar$upperA
-  theta_start <- estobj$ipar$theta_start
+  #theta_start <- estobj$ipar$theta_start
+  theta_start <- rep(0,nrow(respm))
   mu <- estobj$ipar$mu
   sigma2 <- estobj$ipar$sigma2
   cont <- estobj$ipar$cont
@@ -288,7 +288,8 @@ JKpp.gpcm4pl <- function(estobj, cmeth="mean", maxsteps=500,
   slopes <- estobj$ipar$slopes
   lowerA <- estobj$ipar$lowerA
   upperA <- estobj$ipar$upperA
-  theta_start <- estobj$ipar$theta_start
+  #theta_start <- estobj$ipar$theta_start
+  theta_start <- rep(0,nrow(respm))
   mu <- estobj$ipar$mu
   sigma2 <- estobj$ipar$sigma2
   cont <- estobj$ipar$cont
@@ -319,9 +320,7 @@ JKpp.gpcm4pl <- function(estobj, cmeth="mean", maxsteps=500,
     {
       
       
-      jk_mat[,jkrun] <- NR_mixed(awm=respm[,-jkrun,drop=FALSE],DELTA = thres[,-jkrun,drop=FALSE],
-                                 ALPHA = slopes[-jkrun],CS = lowerA[-jkrun],DS = upperA[-jkrun],
-                                 THETA = theta_start, model=model2est,wm=type,maxsteps=maxsteps,
+      jk_mat[,jkrun] <- NR_mixed(awm=respm[,-jkrun,drop=FALSE],DELTA = thres[,-jkrun,drop=FALSE],ALPHA = slopes[-jkrun],LOWA = lowerA[-jkrun],UPPA = upperA[-jkrun],THETA = theta_start, model=model2est,wm=type,maxsteps=maxsteps,
                                  exac=exac,mu=mu,sigma2=sigma2,H=H)$resPP[,1] 
       
     }
@@ -423,8 +422,8 @@ cco <- function(psvalues,cmeth)
     
     jkest <- apply(psvalues,1,function(psv)
     {
-      negpv <- psv[psv <= 0]
-      pospv <- psv[psv > 0]
+      negpv <- psv[psv <= 0 & !is.na(psv) & !is.nan(psv)]
+      pospv <- psv[psv > 0 & !is.na(psv) & !is.nan(psv)]
       
       if(all(is.nan(psv)))
       {
