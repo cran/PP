@@ -35,7 +35,7 @@
 #' \deqn{w(r_i) = H/|r| \rightarrow if\, |r_i| > H}
 #' 
 #'@param respm An integer matrix, which contains the examinees responses. A persons x items matrix is expected.
-#'@param thres A numeric vector or a numeric matrix which contains the threshold parameter for each item. If a matrix is submitted, the first row must contain only \bold{zeroes}!
+#'@param thres A numeric vector or a numeric matrix which contains the threshold parameter (also known as difficulty parameter or beta parameter) for each item. If a matrix is submitted, the first row must contain only \bold{zeroes}! 
 #'@param slopes A numeric vector, which contains the slope parameters for each item - one parameter per item is expected.
 #'@param lowerA A numeric vector, which contains the lower asymptote parameters (kind of guessing parameter) for each item.
 #'@param upperA numeric vector, which contains the upper asymptote parameters for each item.
@@ -56,11 +56,14 @@
 #'
 #'@template resulttemplate
 #'
-#' @seealso \link{PPall}, \link{PP_gpcm}, \link{JKpp}, \link{PV}
+#' @seealso \link{PPass}, \link{PPall}, \link{PP_gpcm}, \link{JKpp}, \link{PV}
 #'
-#' @useDynLib PP
+#' @useDynLib PP, .registration = TRUE
 #' @importFrom Rcpp evalCpp
 #'
+#' @import utils
+#' @import stats
+#' @import graphics
 #'
 #'@export
 #'
@@ -143,7 +146,6 @@ if(is.null(theta_start))
 # a thres-vector is allowed - but for the internal routines
 # it had to be reshaped as a matrix
 
-  
 if(is.matrix(thres))
   {
     #iimm <- nrow(thres) == 1
@@ -239,7 +241,7 @@ cat("type =",type,"\n")
   if(type=="mle" | type=="robust")
   {
     resPPx <- ansol(respm,maxsc)  
-    respm <- respm[!is.na(resPPx[,2]),]
+    respm <- respm[!is.na(resPPx[,2]),,drop=FALSE]
   }
   
   

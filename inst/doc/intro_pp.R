@@ -8,6 +8,7 @@ dim(fourpl_df)
 
 head(fourpl_df)
 
+# extracting the information
 diff_par <- attr(fourpl_df,"diffpar")
 slope_par <- attr(fourpl_df,"slopes")
 
@@ -43,21 +44,27 @@ sum(rdup)
 ## ----decide--------------------------------------------------------------
 library(PP)
 
-res1plmle <- PP_4pl(respm = itmat,thres = diff_par, slopes = slope_par, type = "mle")
+res1plmle <- PP_4pl(respm = itmat, thres = diff_par, slopes = slope_par, type = "mle")
 
 summary(res1plmle)
 
 
 ## ----edit----------------------------------------------------------------
 
-dafest <- data.frame(fourpl_df,res1plmle$resPP$resPP)
+dafest <- data.frame(fourpl_df, res1plmle$resPP$resPP)
 
 head(dafest,10)
 
 ## ----rerun---------------------------------------------------------------
 library(PP)
 
-res1plmle <- PP_4pl(respm = itmat,thres = diff_par, slopes = slope_par, type = "wle")
+res1plwle <- PP_4pl(respm = itmat,thres = diff_par, slopes = slope_par, type = "wle")
 
-summary(res1plmle)
+summary(res1plwle)
+
+## ----ppass---------------------------------------------------------------
+
+pres <- PPass(fourpl_df, items = 3:14, mod="2PL", thres = diff_par, slopes = slope_par, type = "wle")
+
+
 
