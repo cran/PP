@@ -5,6 +5,7 @@ library(data.table)
 
 
 ## ----simulate_data1------------------------------------------------------
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(1526)
 
 # intercepts

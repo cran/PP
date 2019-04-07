@@ -4,6 +4,7 @@ knitr::opts_chunk$set(message = FALSE, results='hide')
 ## ----start, message=FALSE, warning=FALSE---------------------------------
 library(PP)
 
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(1337)
 
 # simulate some intercepts
@@ -127,6 +128,7 @@ awm <- pp_amt$daten_amt[,grep("i\\d{1,3}",colnames(pp_amt$daten_amt))]
 
 # estimate ability parameter and personfit
 # the computation of the standard error takes a while, therefore we use only a part of the provided data
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(1800)
 # sample items
 sampi <- order(sample(1:ncol(awm),40,replace = F))
