@@ -1,10 +1,10 @@
-## ----loadall-------------------------------------------------------------
+## ----loadall------------------------------------------------------------------
 
 library(PP)
 library(data.table)
 
 
-## ----simulate_data1------------------------------------------------------
+## ----simulate_data1-----------------------------------------------------------
 suppressWarnings(RNGversion("3.5.0"))
 set.seed(1526)
 
@@ -22,7 +22,7 @@ awm <- PP::sim_4pl(beta = diffpar, alpha = sl,
 
 awm <- as.data.frame(awm)
 
-## ----data_wrangling1-----------------------------------------------------
+## ----data_wrangling1----------------------------------------------------------
 out <- PPass(respdf = awm,thres = diffpar,
              items="all", mod=c("1PL"), 
              fitindices=c("lz","lzstar","infit","outfit"))
@@ -45,7 +45,7 @@ outdt[, c("su") := NULL]
 # done
 outdt
 
-## ----simulate_data2------------------------------------------------------
+## ----simulate_data2-----------------------------------------------------------
 
 awm <- PP::sim_4pl(beta = diffpar, alpha = sl, lowerA = la, 
                    upperA = ua, theta = c(rnorm(500),rnorm(500,0.5,1.2)))
@@ -54,7 +54,7 @@ awm <- as.data.frame(awm)
 
 
 
-## ----data_wrangling2-----------------------------------------------------
+## ----data_wrangling2----------------------------------------------------------
 out <- PPass(respdf = awm, thres = diffpar, 
              items="all", mod=c("1PL"), 
              fitindices= c("lz","lzstar","infit","outfit"))
